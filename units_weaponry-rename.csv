@@ -1,0 +1,43 @@
+odd;orig;
+#<comment> - comment lines must start with '#' (no leading whitspaces), empty lines allowed.
+
+# AAM:
+weapons/su_r_27r1        ;weapons/su_r_27r;
+weapons/su_r_27t1        ;weapons/su_r_27t;
+weapons/su_r_27et1       ;weapons/su_r_27et
+weapons/su_r_60mk        ;weapons/su_r_60m;
+weapons/su_r_73e         ;weapons/su_r_73;
+weapons/su_rvv_ae        ;weapons/su_r_77;
+
+weapons/su_pl2           ;weapons/su_r_3s;
+weapons/su_pl7           ;weapons/fr_r_550_magic;
+weapons/su_pl8           ;weapons/il_pyton_3;
+weapons/cn_pl11          ;weapons/it_aspide_1a;
+weapons/cn_sd10a         ;weapons/cn_pl12;
+
+weapons/swd_rb24         ;weapons/us_aim9b_sidewinder;
+weapons/swd_rb24j        ;weapons/us_aim9p_sidewinder;
+weapons/swd_rb71         ;weapons/uk_skyflash_aim_7_dogfight;
+weapons/swd_rb74         ;weapons/us_aim9l_sidewinder;
+weapons/swd_rb74m        ;weapons/us_aim9m_sidewinder;
+weapons/swd_rb99         ;weapons/us_aim_120a;
+
+weapons/sws_flz_lwf_63_80;weapons/us_aim9j_sidewinder;
+
+# AGM:
+weapons/swd_rb75         ;weapons/us_agm_65a;
+weapons/sws_flz_lwf_lb_82;weapons/us_agm_65b;
+
+# ATGM:
+weapons/swd_rb52         ;weapons/164mm_lfk_ss11_rocket_launcher;
+weapons/swd_rb55b        ;weapons/us_bgm_71_tow_heli;
+weapons/swd_rb55c        ;weapons/us_bgm_71_tow2_heli;
+
+# Cannons and launchers:
+weapons/127mm_Rbs_55_tow_rocket_launcher          ;weapons/127mm_TOW_rocket_launcher
+weapons/127mm_Rbs_55_tow_launcher_user_cannon     ;weapons/127mm_BGM_71_tow_launcher_user_cannon;
+weapons/127mm_Rbs_55_tow_UDES_launcher_user_cannon;weapons/127mm_BGM_71_tow_launcher_user_cannon;
+
+# Shells:
+127mm_rb_55_b            ;127mm_i_tow;
+152mm_rb_55_c            ;152mm_tow_2;
