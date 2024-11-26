@@ -14,7 +14,9 @@
 namespace fs = std::filesystem;
 namespace rcv = rapidcsv;
 
-constexpr auto UNITS_WEAPON        = "_units_weaponry.csv";
+constexpr char PARSE_COMMENT_PREFIX = '#';
+
+constexpr auto UNITS_WEAPON_LOAD   = "_units_weaponry.csv";
 constexpr auto UNITS_WEAPON_SAVE   =  "units_weaponry.csv";
 constexpr auto UNITS_WEAPON_RENAME =  "units_weaponry-rename.csv";
 
@@ -29,7 +31,7 @@ class WtRename{
 
 public:
 	void operator()() {
-		if (!fs::exists(UNITS_WEAPON))        { std::cerr << "ERR: file not present near the executable, missing: " << UNITS_WEAPON        << '\n'; throw std::exception("No file"); }
+		if (!fs::exists(UNITS_WEAPON_LOAD))   { std::cerr << "ERR: file not present near the executable, missing: " << UNITS_WEAPON_LOAD   << '\n'; throw std::exception("No file"); }
 		if (!fs::exists(UNITS_WEAPON_RENAME)) { std::cerr << "ERR: file not present near the executable, missing: " << UNITS_WEAPON_RENAME << '\n'; throw std::exception("No file"); }
 
 		DerenameWeapons();
@@ -39,15 +41,18 @@ private:
 	void DerenameWeapons() {
 		std::cout << "Renaming weapons\n";
 
-		units .Load(UNITS_WEAPON       , rcv::LabelParams(), rcv::SeparatorParams(';', false, true, false, false));
-		rename.Load(UNITS_WEAPON_RENAME, rcv::LabelParams(), rcv::SeparatorParams(';', true, true, true, false), rapidcsv::ConverterParams(), rapidcsv::LineReaderParams(true, '#', true));
+		units .Load(UNITS_WEAPON_LOAD  , rcv::LabelParams(), rcv::SeparatorParams(';', false, true, false, false));
+		rename.Load(UNITS_WEAPON_RENAME, rcv::LabelParams(), rcv::SeparatorParams(';', true , true, true , false));
 
 		{ // Check UNITS_WEAPON_RENAME table for `odd` IDs duplication
 			std::set<std::string> oddIds;
 			for (size_t r = 0; r < rename.GetRowCount(); r++) {
 				const auto &row = rename.GetRow<std::string>(r);
+
+				if (SkipRow(row)) continue;
+
 				if (oddIds.contains(row[0])) {
-					std::cerr << "ERR: " << UNITS_WEAPON_RENAME << ": odd ID duplication detected: " << row[0] << ";\n";
+					std::cerr << "ERR: " << "odd ID duplication detected: " << UNITS_WEAPON_RENAME << ": L" << r + 2 << ": '" << row[0] << "'\n";
 					throw std::exception("Odd ID duplication");
 				}
 
@@ -100,10 +105,10 @@ private:
 		// Process and apply renames
 		for (size_t r = 0; r < rename.GetRowCount(); r++) {
 			const auto &row = rename.GetRow<std::string>(r);
-			if (row.empty()) continue;
+			if (SkipRow(row)) continue;
 			if (row.size() < 2 || row[0].empty() || row[1].empty()) {
-				std::cerr << "ERR: " << UNITS_WEAPON_RENAME << ": ill-formed line for renaming #" << r + 2 << " (blank and comment lines affect the row number)\n";
-				throw std::exception(std::format("Ill-formed line for renaming #{}",  r + 2).c_str());
+				std::cerr << "ERR: " << UNITS_WEAPON_RENAME << ": L" << r + 2 << ": ill-formed line for renaming" << "\n";
+				throw std::exception(std::format("Ill-formed line for renaming L{}",  r + 2).c_str());
 			}
 
 			const std::string &odd  = row[0];
@@ -117,8 +122,9 @@ private:
 
 
 		units.Save(UNITS_WEAPON_SAVE);
-		std::cout << "\nRenaming of weapons finished, results saved to the: " << UNITS_WEAPON_SAVE << "\n";
-		std::cout << "Hint: You can use a file (text) campare tool to see the differences between original and de-renamed file\n";
+		std::cout << "\n";
+		std::cout << "Renaming of weapons finished, results saved to the: " << UNITS_WEAPON_SAVE << "\n";
+		std::cout << "Hint: You can use a text campare tool to see the differences between original and altered .csv files\n";
 	}
 
 	void Rerename(std::string odd, std::string orig)
@@ -174,6 +180,15 @@ private:
 		units.SetRow(odd, rowOdd); // apply the de-renamed values (of all languages)
 	}
 
+	bool SkipRow(const std::vector<std::string> &row) {
+		if  (
+				row.empty() ||
+				(row.size() == 1 && row[0].empty()) ||
+				(!row[0].empty() && row[0][0] == PARSE_COMMENT_PREFIX)
+			)
+			return true;
+		return false;
+	}
 };
 
 int main()
