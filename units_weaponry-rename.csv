@@ -4,7 +4,8 @@ odd;orig;
 # AAM:
 weapons/su_r_27r1        ;weapons/su_r_27r;
 weapons/su_r_27t1        ;weapons/su_r_27t;
-weapons/su_r_27et1       ;weapons/su_r_27et
+weapons/su_r_27er1       ;weapons/su_r_27er;
+weapons/su_r_27et1       ;weapons/su_r_27et;
 weapons/su_r_60mk        ;weapons/su_r_60m;
 weapons/su_r_73e         ;weapons/su_r_73;
 weapons/su_rvv_ae        ;weapons/su_r_77;
@@ -22,7 +23,16 @@ weapons/swd_rb74         ;weapons/us_aim9l_sidewinder;
 weapons/swd_rb74m        ;weapons/us_aim9m_sidewinder;
 weapons/swd_rb99         ;weapons/us_aim_120a;
 
-weapons/sws_flz_lwf_63_80;weapons/us_aim9j_sidewinder;
+weapons/us_aim9n_sidewinder; weapons/us_aim9j_sidewinder;
+
+weapons/sws_flz_lwf_63           ;weapons/us_aim9b_sidewinder;
+weapons/sws_flz_lwf_63_75        ;weapons/us_aim9e_sidewinder;
+weapons/sws_flz_lwf_63_80        ;weapons/us_aim9j_sidewinder;
+weapons/us_aim_120b_switzerland  ;weapons/us_aim_120b;
+weapons/us_aim_120c_5_switzerland;weapons/us_aim_120c_5;
+
+#weapons/sws_flz_lwf_ll_64       ; !rename; !all: AIM-26B Falcon; # !English: <just_english>;
+#weapons/sws_flz_lwf_ll_64/short ; !rename; !all: AIM-26B       ; # !all: <allname>; !English: <just_eng>;
 
 # ATGM:
 weapons/cn_ba_9          ;weapons/cn_akd_9;
@@ -31,8 +41,9 @@ weapons/swd_rb55b        ;weapons/us_bgm_71_tow_heli;
 weapons/swd_rb55c        ;weapons/us_bgm_71_tow2_heli;
 
 # AGM
-weapons/swd_rb75         ;weapons/us_agm_65a;
-weapons/sws_flz_lwf_lb_82;weapons/us_agm_65b;
+weapons/swd_rb75           ;weapons/us_agm_65a;
+weapons/sws_flz_lwf_lb_82  ;weapons/us_agm_65b;
+weapons/fr_as30_switzerland;weapons/fr_as30;
 
 # Ammunition:
 127mm_rb_55_b            ;127mm_i_tow;
