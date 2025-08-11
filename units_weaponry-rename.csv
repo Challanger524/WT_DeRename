@@ -23,7 +23,8 @@ weapons/swd_rb74         ;weapons/us_aim9l_sidewinder;
 weapons/swd_rb74m        ;weapons/us_aim9m_sidewinder;
 weapons/swd_rb99         ;weapons/us_aim_120a;
 
-weapons/us_aim9n_sidewinder; weapons/us_aim9j_sidewinder;
+weapons/us_aim9n_sidewinder ;weapons/us_aim9j_sidewinder;
+weapons/ro_a91              ;weapons/su_r_3s;
 
 weapons/sws_flz_lwf_63           ;weapons/us_aim9b_sidewinder;
 weapons/sws_flz_lwf_63_75        ;weapons/us_aim9e_sidewinder;
@@ -31,6 +32,7 @@ weapons/sws_flz_lwf_63_80        ;weapons/us_aim9j_sidewinder;
 weapons/us_aim_120b_switzerland  ;weapons/us_aim_120b;
 weapons/us_aim_120c_5_switzerland;weapons/us_aim_120c_5;
 
+# Feature: renaming is not yet implemented!
 #weapons/sws_flz_lwf_ll_64       ; !rename; !all: AIM-26B Falcon; # !English: <just_english>;
 #weapons/sws_flz_lwf_ll_64/short ; !rename; !all: AIM-26B       ; # !all: <allname>; !English: <just_eng>;
 

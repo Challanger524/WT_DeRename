@@ -8,7 +8,7 @@
 #include <format>
 #include <string>
 #include <set>
-#include <map>
+#include <unordered_map>
 //#include <assert.h>
 
 namespace fs = std::filesystem;
@@ -18,16 +18,18 @@ constexpr char PARSE_COMMENT_PREFIX = '#';
 
 constexpr auto UNITS_WEAPON_LOAD   = "_units_weaponry.csv";
 constexpr auto UNITS_WEAPON_SAVE   =  "units_weaponry.csv";
-constexpr auto UNITS_WEAPON_RENAME =  "units_weaponry-rename.csv";
+constexpr auto UNITS_WEAPON_RENAME =  "units_weaponry-rename.csv";    // renaming rule-plate
+constexpr auto UNITS_WEAPON_AFFECT =  "units_weaponry-de_rename.csv"; // renamed content only
 
 constexpr auto ID_POSTFIX_SHORT         = "/short";
 constexpr auto ID_POSTFIX_DEFAULT       = "_default";
 constexpr auto ID_POSTFIX_DEFAULT_SHORT = "_default/short";
 
 class WtRename{
-	rcv::Document units;
-	rcv::Document rename;
-	std::map<std::string, size_t> unitMap;
+	rcv::Document units;  // full units_weaponry.csv content (original that going to be mutated)
+	rcv::Document affect; // renamed content only
+	rcv::Document rename; // renaming rule-plate
+	std::unordered_map<std::string, size_t> unitMap;
 
 public:
 	void operator()() {
@@ -71,6 +73,16 @@ private:
 		}
 #endif
 
+		// Copy labels to `affect`
+		{ // List all lables
+			std::istringstream dummy_("");
+			/*  */ affect.Load(dummy_, rcv::LabelParams(0, -1), rcv::SeparatorParams(';', false, true, false, false));
+
+			const auto &labels = units.GetColumnNames();
+			for (size_t i = 0; i < labels.size(); i++)
+				affect.SetColumnName(i, labels[i]);
+		}
+
 		// Map IDs to the rows positions
 		std::cout << "Mapping units..." << '\n';
 		const size_t initialRowCount = units.GetRowCount();
@@ -103,7 +115,8 @@ private:
 		std::cout << '\n';
 
 		// Process and apply renames
-		for (size_t r = 0; r < rename.GetRowCount(); r++) {
+		for (size_t r = 0; r < rename.GetRowCount(); r++)
+		{
 			const auto &row = rename.GetRow<std::string>(r);
 			if (SkipRow(row)) continue;
 			if (row.size() < 2 || row[0].empty() || row[1].empty()) {
@@ -121,13 +134,14 @@ private:
 		}
 
 
-		units.Save(UNITS_WEAPON_SAVE);
+		units .Save(UNITS_WEAPON_SAVE  );
+		affect.Save(UNITS_WEAPON_AFFECT);
 		std::cout << "\n";
 		std::cout << "Renaming of weapons finished, results saved to the: " << UNITS_WEAPON_SAVE << "\n";
 		std::cout << "Hint: You can use a text campare tool to see the differences between original and altered .csv files\n";
 	}
 
-	void Rerename(std::string odd, std::string orig)
+	void Rerename(std::string odd, std::string orig) // f1
 	{
 		// Wrap IDs into double quotes
 		if (!odd .empty() && odd[0]  != '"') odd  = '"' + odd  + '"';
@@ -155,13 +169,13 @@ private:
 		Rerename(oddRow, origRow);
 	}
 
-	void Rerename(const size_t odd, const size_t orig)
+	void Rerename(const size_t odd, const size_t orig) // f2
 	{
 		const auto &rowOrig = units.GetRow<std::string>(orig);
 		      auto  rowOdd  = units.GetRow<std::string>(odd );
 
 		// Perform the actual replacement of `off` translations with `orig`-inal ones
-		size_t col = 1;
+		size_t col = 1; // [0] is a key (skip it)
 		for (col; col < rowOrig.size(); col++)
 		{
 			if (rowOdd.size() == col)
@@ -177,7 +191,8 @@ private:
 			for (size_t c = col; c < rowOdd.size(); c++)
 				rowOdd[c].clear();
 
-		units.SetRow(odd, rowOdd); // apply the de-renamed values (of all languages)
+		units .SetRow(odd, rowOdd); // apply the de-renamed values (of all languages)
+		affect.SetRow(affect.GetRowCount(), rowOdd);
 	}
 
 	bool SkipRow(const std::vector<std::string> &row) {

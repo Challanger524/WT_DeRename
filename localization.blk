@@ -1,0 +1,4 @@
+locTable{
+  ...
+  file:t="%lang/../lang-mod/units_weaponry-de_renamed.csv"
+}
